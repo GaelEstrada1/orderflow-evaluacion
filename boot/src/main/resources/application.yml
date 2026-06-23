@@ -23,6 +23,12 @@ spring:
       hibernate:
       format_sql: true
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/orderflow-realm
+
 logging:
   level:
     root: INFO

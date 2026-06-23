@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: orderflow-keycloak
+    command: start-dev --import-realm --verbose
+
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: dev-file
+      KC_HEALTH_ENABLED: "true"
+
+    ports:
+      - "8180:8080"
+
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/health/ready || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
