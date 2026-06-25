@@ -3,12 +3,14 @@ package com.mfpe.e2e;
 import com.mfpe.adapter.in.rest.dto.AddItemRequest;
 import com.mfpe.adapter.in.rest.dto.CreateOrderRequest;
 import com.mfpe.adapter.in.rest.dto.OrderResponse;
+import com.mfpe.config.TestSecurityConfig;
 import com.mfpe.model.enums.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestRestTemplate
+@Import(TestSecurityConfig.class)
 public class OrderFlowE2ETest {
 
     @Autowired
