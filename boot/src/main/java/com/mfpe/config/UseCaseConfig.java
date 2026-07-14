@@ -9,6 +9,7 @@ import com.mfpe.port.out.FindOrderByIdPort;
 import com.mfpe.port.out.InventoryService;
 import com.mfpe.port.out.PaymentGateway;
 import com.mfpe.port.out.SaveOrderPort;
+import com.mfpe.port.out.NotificationService;
 import com.mfpe.service.AddItemToOrderService;
 import com.mfpe.service.CancelOrderService;
 import com.mfpe.service.CreateOrderService;
@@ -21,53 +22,35 @@ import org.springframework.context.annotation.Configuration;
 public class UseCaseConfig {
 
     @Bean
-    public CreateOrderUseCase createOrderUseCase(
-            SaveOrderPort saveOrderPort
-    ) {
-        return new CreateOrderService(saveOrderPort);
+    public CreateOrderUseCase createOrderUseCase(SaveOrderPort port) {
+        return new CreateOrderService(port);
     }
 
     @Bean
-    public AddItemToOrderUseCase addItemToOrderUseCase(
-            FindOrderByIdPort findOrderByIdPort,
-            InventoryService inventoryService,
-            SaveOrderPort saveOrderPort
-    ) {
-        return new AddItemToOrderService(
-                findOrderByIdPort,
-                inventoryService,
-                saveOrderPort
-        );
+    public AddItemToOrderUseCase addItemToOrderUseCase(SaveOrderPort saveOrderPort,
+                                                       FindOrderByIdPort findOrderByIdPort,
+                                                       InventoryService service){
+        return new AddItemToOrderService(findOrderByIdPort, service, saveOrderPort);
     }
 
     @Bean
-    public GetOrderByIdUseCase getOrderByIdUseCase(
-            FindOrderByIdPort findOrderByIdPort
-    ) {
+    public GetOrderByIdUseCase getOrderByIdUseCase(FindOrderByIdPort findOrderByIdPort) {
         return new GetOrderByIdService(findOrderByIdPort);
     }
 
     @Bean
-    public PayOrderUseCase payOrderUseCase(
-            PaymentGateway paymentGateway,
-            FindOrderByIdPort findOrderByIdPort,
-            SaveOrderPort saveOrderPort
-    ) {
-        return new PayOrderService(
-                paymentGateway,
-                findOrderByIdPort,
-                saveOrderPort
-        );
+    public PayOrderUseCase payOrderUseCase(PaymentGateway paymentGateway,
+                                           FindOrderByIdPort findOrderByIdPort,
+                                           SaveOrderPort saveOrderPort,
+                                           NotificationService notificationService){
+        return new PayOrderService(paymentGateway, findOrderByIdPort, saveOrderPort, notificationService);
     }
 
     @Bean
-    public CancelOrderUseCase cancelOrderUseCase(
-            FindOrderByIdPort findOrderByIdPort,
-            SaveOrderPort saveOrderPort
-    ) {
-        return new CancelOrderService(
-                findOrderByIdPort,
-                saveOrderPort
-        );
+    public CancelOrderUseCase cancelOrderUseCase(FindOrderByIdPort findOrderByIdPort,
+                                                 SaveOrderPort saveOrderPort,
+                                                 NotificationService notificationService){
+        return new CancelOrderService(findOrderByIdPort, saveOrderPort, notificationService);
     }
+
 }

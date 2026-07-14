@@ -19,10 +19,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import com.mfpe.port.out.NotificationService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class PayOrderServiceTest {
@@ -35,6 +37,9 @@ class PayOrderServiceTest {
 
     @Mock
     private PaymentGateway paymentGateway;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private PayOrderService payOrderService;
@@ -56,6 +61,9 @@ class PayOrderServiceTest {
         // Assert
         Assertions.assertEquals(OrderStatus.PAID, order.getStatus());
         verify(saveOrderPort).save(order);
+
+        verify(notificationService)
+                .notifyOrderStatusChange(orderId, OrderStatus.PAID);
     }
 
     @Test

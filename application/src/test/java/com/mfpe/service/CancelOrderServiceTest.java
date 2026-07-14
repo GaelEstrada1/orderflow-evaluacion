@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import com.mfpe.port.out.NotificationService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -31,6 +32,9 @@ class CancelOrderServiceTest {
 
     @Mock
     private FindOrderByIdPort findOrderByIdPort;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private CancelOrderService cancelOrderService;
