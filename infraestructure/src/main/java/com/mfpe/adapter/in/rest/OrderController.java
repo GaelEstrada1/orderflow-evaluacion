@@ -10,6 +10,7 @@ import com.mfpe.model.entity.Order;
 import com.mfpe.port.in.AddItemToOrderUseCase;
 import com.mfpe.port.in.CancelOrderUseCase;
 import com.mfpe.port.in.CreateOrderUseCase;
+import com.mfpe.port.in.GetOrderByIdUseCase;
 import com.mfpe.port.in.PayOrderUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +26,20 @@ public class OrderController {
     private final AddItemToOrderUseCase addItemToOrderUseCase;
     private final PayOrderUseCase payOrderUseCase;
     private final CancelOrderUseCase cancelOrderUseCase;
+    private final GetOrderByIdUseCase getOrderByIdUseCase;
     private final OrderResponseMapper responseMapper;
 
     public OrderController(CreateOrderUseCase createOrderUseCase,
                            AddItemToOrderUseCase addItemToOrderUseCase,
                            PayOrderUseCase payOrderUseCase,
                            CancelOrderUseCase cancelOrderUseCase,
+                           GetOrderByIdUseCase getOrderByIdUseCase,
                            OrderResponseMapper responseMapper) {
         this.createOrderUseCase = createOrderUseCase;
         this.addItemToOrderUseCase = addItemToOrderUseCase;
         this.payOrderUseCase = payOrderUseCase;
         this.cancelOrderUseCase = cancelOrderUseCase;
+        this.getOrderByIdUseCase = getOrderByIdUseCase;
         this.responseMapper = responseMapper;
     }
 
@@ -52,6 +56,12 @@ public class OrderController {
                 .toUri();
 
         return ResponseEntity.created(location).body(responseMapper.toResponse(order));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable String id){
+        Order order = getOrderByIdUseCase.getOrderById(id);
+        return ResponseEntity.ok(responseMapper.toResponse(order));
     }
 
     @PostMapping("/{id}/items")
